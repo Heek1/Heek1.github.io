@@ -1,0 +1,59 @@
+.trigger {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  color: #eaf2ff;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 8px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.trigger:hover {
+  box-shadow: 0 0px 15px rgba(255, 255, 255, 0.25);
+}
+
+.panel {
+    box-shadow:0 0 0 2px rgba(255, 255, 255, 0.04),0 3px 13px rgba(0,0,0,.12);
+    color: #eaf2ff;
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 12px;
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    transform-origin: top left;
+    animation: popup-appear 180ms cubic-bezier(.2,.9,.2,1);
+}
+
+@keyframes popup-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.panel .item {
+  padding: 8px 6px;
+  border-radius: 8px;
+}
+.panel .item:hover {
+  background: rgba(130, 29, 29, 0.02);
+}
+
+
+.buttons{
+  border-radius: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  padding: 3px 3px 3px 7px;
+  display: flex
+;
+}
+
+.buttons:hover{
+  background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.09));
+}

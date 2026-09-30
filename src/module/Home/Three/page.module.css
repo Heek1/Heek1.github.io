@@ -1,0 +1,38 @@
+.page {
+  min-height: 50vh;
+  margin-top: 10vh;
+  width: min(100% - 48px, 1500px);
+  margin-left: auto;
+  margin-right: auto;
+}
+.pageTitle { text-align: center; margin-bottom: 40px; color: #333; font-size: 2.5em; font-weight: 700; }
+.grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; gap: 18px; }
+.card {
+  display: flex; flex-direction: column;
+  background: linear-gradient(155deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
+  border: 1px solid rgba(255,255,255,.12); border-radius: 10px; padding: 20px;
+  min-width: 0; transition: transform .2s ease, border-color .2s ease;
+}
+.card:hover { transform: translateY(-4px); border-color: rgba(48,209,88,.45); }
+.header { display: flex; align-items: flex-start; flex: 1; margin-bottom: 18px; }
+.info { display: flex; flex-direction: column; }
+.title { font-size: 1.2rem; color: white; margin: 0; line-height: 1.3; }
+.bottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+.ProgresAndLinks { flex: 1; display: flex; flex-direction: column; gap: .5rem; }
+.description { font-size: .88rem; color: #b8b8bd; line-height: 1.65; margin: 8px 0 0; }
+.linksContainer { display: flex; gap: 10px; margin-top: 8px; }
+.linkButton {
+  gap: 8px; display: inline-flex; justify-content: center; align-items: center;
+  padding: 9px 12px; background-color: rgba(255,255,255,.06); color: #e7e7e9; text-decoration: none;
+  border: 1px solid rgba(255,255,255,.12); border-radius: 7px; font-weight: 500; transition: .2s ease;
+}
+.linkButton:hover { background-color: rgba(48,209,88,.12); border-color: rgba(48,209,88,.45); color: #b9f2c4; }
+.linkButton svg { font-size: 1em; }
+.linkText { font-size: clamp(.7rem, 1vw, .8rem); text-align: center; }
+@media (max-width: 1100px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .page { width: calc(100% - 32px); }
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+}

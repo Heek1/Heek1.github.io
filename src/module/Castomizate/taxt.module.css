@@ -1,0 +1,13 @@
+.page {
+  cursor: pointer;
+  color: var(--grey-light-80, #c6c6cc);
+  border-bottom: 1px solid rgba(48, 209, 88, .55);
+  text-decoration: none;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.page:hover,
+.page:focus-visible {
+  color: #30d158;
+  border-color: #30d158;
+}
