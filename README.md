@@ -18,10 +18,12 @@ npm run build
 
 ## Project Layout
 
-- `src/app`: App Router entry point, global styles, and metadata.
-- `src/components`: Shared header and contact popup.
-- `src/module/Home`: Hero scene, About Me section, and project list.
-- `src/module/Castomizate`: Shared text-link styling.
-- `public/3d`: Hero model.
-- `public/Language_it`: Floating technology icons.
-- `public/svg`: Contact icons.
+- `src/app`: App Router entry point, global styles, metadata, and the Open Graph preview image.
+- `src/components/navigation`: Site header with section highlighting and the mobile menu.
+- `src/components/contact`: Contact popup.
+- `src/components/text-link`: Shared inline text-link styling.
+- `src/module/Home/Hero`: Hero 3D scene and orbiting technology icons.
+- `src/module/Home/About`: About Me section.
+- `src/module/Home/Projects`: Project list.
+- `public/3d`: Hero model (Meshopt-compressed glTF).
+- `public/Language_it`: Technology icons (WebP).

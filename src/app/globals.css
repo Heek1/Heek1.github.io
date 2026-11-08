@@ -1,11 +1,12 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* The site always uses a dark theme, so text colors must not depend on the OS theme. */
+  --background: #121212;
+  --foreground: #ededed;
   --white-background: #F2F2F2;
   --dark-background: #1a1a1a;
-  --grean: #30D158;
+  --green: #30D158;
   --yellow: #FFD60A;
-  --read: #FF453A;
+  --red: #FF453A;
   --blue: #0A84FF;
   --blue-dark-80: #086acc;
   --blue-dark-60: #064f99;
@@ -22,13 +23,18 @@
   --grey-dark-15: #252526;
   --grey-dark: #19191a;
   --border-radius: 10px;
+  --header-offset: 96px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
 }
 
 html,
@@ -39,17 +45,11 @@ body {
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: linear-gradient(to bottom, #121212, #1f1f1f);
+  background-color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: linear-gradient(to bottom, #121212, #1f1f1f);
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
 }
 
 a {
@@ -57,8 +57,21 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
   html {
-    color-scheme: dark;
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

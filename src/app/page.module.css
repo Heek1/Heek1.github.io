@@ -1,21 +1,22 @@
-html {
-  scroll-behavior: smooth;
-}
-
 .page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-bottom: 80px;
 }
 
-.one {
+.section {
+  scroll-margin-top: var(--header-offset);
+}
+
+.hero {
   width: min(100%, 1500px);
   min-height: 100svh;
   margin: 0 auto;
   align-items: center;
   justify-content: center;
   gap: clamp(24px, 4vw, 64px);
-  padding: 92px 32px 32px;
+  padding: 92px 32px 0;
   display: flex;
 
   .title {
@@ -28,30 +29,31 @@ html {
       color: white;
       margin: 0;
     }
-
-    h3 {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #a1a1a6;
-      margin-top: 12px;
-    }
   }
 }
 
+.subtitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #a1a1a6;
+  margin-top: 12px;
+}
+
 .accent {
-  color: #30d158;
+  color: var(--green);
   text-shadow: 0 0 28px rgba(48, 209, 88, .22);
 }
 
-.MainPage {
+.scene {
   flex: 0 1 800px;
   min-width: 0;
 }
 
 @media (max-width: 750px) {
-  .one {
+  .hero {
     flex-direction: column;
-    min-height: 100svh;
+    min-height: auto;
     gap: 0;
     padding: 104px 18px 0;
 
@@ -62,7 +64,7 @@ html {
     }
   }
 
-  .MainPage {
+  .scene {
     width: min(100%, 560px);
     flex: none;
     display: flex;
