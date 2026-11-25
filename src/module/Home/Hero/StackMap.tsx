@@ -98,6 +98,8 @@ const ROUTES: TechId[][] = [
 ];
 
 type Point = { x: number; y: number };
+
+const FIELD_COLOR = "rgba(150, 165, 155, 0.16)";
 type Packet = { route: TechId[]; leg: number; t: number; speed: number };
 
 export default function StackMap() {
@@ -131,6 +133,9 @@ export default function StackMap() {
     let count = 0;
     let pointerX = -9999;
     let pointerY = -9999;
+    let fieldAtRest = false;
+    let fieldCache: HTMLCanvasElement | null = null;
+    let started = false;
     const packets: Packet[] = [];
     let nextSpawn = 0;
     let rafId: number | null = null;
@@ -173,14 +178,35 @@ export default function StackMap() {
       posY = Float32Array.from(ys);
       velX = new Float32Array(count);
       velY = new Float32Array(count);
+
+      fieldCache = document.createElement("canvas");
+      fieldCache.width = canvas.width;
+      fieldCache.height = canvas.height;
+      const cache = fieldCache.getContext("2d");
+      if (cache) {
+        cache.setTransform(dpr, 0, 0, dpr, 0, 0);
+        cache.beginPath();
+        for (let i = 0; i < count; i++) {
+          cache.moveTo(homeX[i] + 1, homeY[i]);
+          cache.arc(homeX[i], homeY[i], 1, 0, Math.PI * 2);
+        }
+        cache.fillStyle = FIELD_COLOR;
+        cache.fill();
+      }
+      fieldAtRest = true;
+      // Until the animation starts, show a still frame.
+      if (!started) draw(performance.now(), 0);
     };
 
+    // Flash a node when a request arrives. The Web Animations API restarts it without forcing a layout.
     const pulse = (id: TechId) => {
-      const el = nodeEl(id);
-      if (!el) return;
-      el.dataset.pulse = "false";
-      void el.offsetWidth; // restart the animation
-      el.dataset.pulse = "true";
+      nodeEl(id)?.animate(
+        [
+          { borderColor: "#30d158", boxShadow: "0 0 0 0 rgba(48, 209, 88, 0.6)" },
+          { boxShadow: "0 0 0 12px rgba(48, 209, 88, 0)" },
+        ],
+        { duration: 700, easing: "ease-out" }
+      );
     };
 
     const spawn = (now: number) => {
@@ -194,8 +220,12 @@ export default function StackMap() {
       ctx.clearRect(0, 0, width, height);
       const hover = hoverRef.current;
 
-      // Dot field: pushed away from the cursor, springs back.
+      // Dot field: pushed away from the cursor, springs back. At rest it is a cached image.
       const pushR = 90;
+      if (fieldAtRest && fieldCache) {
+        ctx.drawImage(fieldCache, 0, 0, width, height);
+      } else {
+      let moving = 0;
       ctx.beginPath();
       for (let i = 0; i < count; i++) {
         if (!reduced.matches) {
@@ -213,12 +243,19 @@ export default function StackMap() {
           velY[i] = (velY[i] + fy) * 0.78;
           posX[i] += velX[i];
           posY[i] += velY[i];
+          moving = Math.max(moving, Math.abs(velX[i]) + Math.abs(velY[i]) + Math.abs(homeX[i] - posX[i]) + Math.abs(homeY[i] - posY[i]));
         }
         ctx.moveTo(posX[i] + 1, posY[i]);
         ctx.arc(posX[i], posY[i], 1, 0, Math.PI * 2);
       }
-      ctx.fillStyle = "rgba(150, 165, 155, 0.16)";
+      ctx.fillStyle = FIELD_COLOR;
       ctx.fill();
+      if (pointerX < -9000 && moving < 0.05) {
+        posX.set(homeX);
+        posY.set(homeY);
+        fieldAtRest = true;
+      }
+      }
 
       // Wires as dotted curves; the ones touching the hovered part light up.
       for (const lit of [false, true]) {
@@ -236,7 +273,7 @@ export default function StackMap() {
         ctx.fill();
       }
 
-      if (reduced.matches) return;
+      if (reduced.matches || !started) return;
 
       // Requests travelling along the wires.
       spawn(now);
@@ -263,15 +300,17 @@ export default function StackMap() {
           if (index < 0) break;
           const p = points[index];
           const alpha = 1 - trail / 6;
+          if (trail === 0) {
+            // Soft halo instead of shadowBlur, which is expensive to render every frame.
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 9, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(48, 209, 88, 0.18)";
+            ctx.fill();
+          }
           ctx.beginPath();
           ctx.arc(p.x, p.y, trail === 0 ? 3.2 : 2.2, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(${trail === 0 ? "190, 255, 205" : "48, 209, 88"}, ${alpha})`;
-          if (trail === 0) {
-            ctx.shadowColor = "rgba(48, 209, 88, 0.9)";
-            ctx.shadowBlur = 12;
-          }
           ctx.fill();
-          ctx.shadowBlur = 0;
         }
       }
     };
@@ -285,7 +324,7 @@ export default function StackMap() {
     };
 
     const start = () => {
-      if (rafId === null && visible) {
+      if (rafId === null && visible && started) {
         last = performance.now();
         rafId = requestAnimationFrame(frame);
       }
@@ -300,6 +339,7 @@ export default function StackMap() {
       const rect = root.getBoundingClientRect();
       pointerX = event.clientX - rect.left;
       pointerY = event.clientY - rect.top;
+      fieldAtRest = false;
       if (reduced.matches) start();
     };
 
@@ -328,7 +368,18 @@ export default function StackMap() {
     root.addEventListener("pointerleave", onPointerLeave);
     const onMotionChange = () => start();
     reduced.addEventListener("change", onMotionChange);
-    start();
+
+    // Start animating once the page has finished loading, so it doesn't compete with it.
+    const begin = () => {
+      started = true;
+      start();
+    };
+    const whenIdle = () => {
+      if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(begin, { timeout: 1500 });
+      else setTimeout(begin, 300);
+    };
+    if (document.readyState === "complete") whenIdle();
+    else window.addEventListener("load", whenIdle, { once: true });
 
     return () => {
       stop();

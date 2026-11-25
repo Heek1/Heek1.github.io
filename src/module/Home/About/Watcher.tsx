@@ -74,6 +74,9 @@ export default function Watcher({
     let velY = new Float32Array(0);
     let bucketOf = new Uint8Array(0);
     let sizeOf = new Float32Array(0);
+    let edgeOf = new Float32Array(0);
+    let zoneOf = new Uint8Array(0);
+    let atRest = false;
 
     // Pointer state, in canvas coordinates.
     let pointerX = 0;
@@ -126,6 +129,12 @@ export default function Watcher({
       count = xs.length;
       homeX = Float32Array.from(xs);
       homeY = Float32Array.from(ys);
+      // Per-dot constants: fade towards the rim, and whether the dot can ever be part of an eye or brow.
+      edgeOf = Float32Array.from(xs, (x, i) => Math.max(0, Math.min(1, (radius - Math.hypot(x - center, ys[i] - center)) / (radius * 0.3))));
+      zoneOf = Uint8Array.from(xs, (x, i) =>
+        Math.abs(x - center) < size * 0.43 && ys[i] > center - size * 0.32 && ys[i] < center + size * 0.2 ? 1 : 0
+      );
+      atRest = false;
       posX = Float32Array.from(xs);
       posY = Float32Array.from(ys);
       velX = new Float32Array(count);
@@ -199,7 +208,6 @@ export default function Watcher({
 
     const shade = (open: number) => {
       const center = size / 2;
-      const radius = size * 0.49;
       const eyeA = size * 0.19;
       const eyeB0 = size * 0.135;
       const eyeB = eyeB0 * open;
@@ -225,12 +233,13 @@ export default function Watcher({
       for (let i = 0; i < count; i++) {
         const hx = homeX[i];
         const hy = homeY[i];
-        const edge = Math.min(1, (radius - Math.hypot(hx - center, hy - center)) / (radius * 0.3));
+        const edge = edgeOf[i];
         let bucket = 0;
         let s = 0.17;
 
+        // Most dots are background and never need the eye maths.
         let inEye = false;
-        for (const eye of eyes) {
+        if (zoneOf[i]) for (const eye of eyes) {
           const nx = (hx - eye.ex) / eyeA;
           const ny = (hy - eye.ey) / Math.max(eyeB, 0.001);
           const e = nx * nx + ny * ny;
@@ -271,7 +280,7 @@ export default function Watcher({
           break;
         }
 
-        if (!inEye) {
+        if (!inEye && zoneOf[i]) {
           for (const eye of eyes) {
             const bx = (hx - eye.ex) / (eyeA * 0.95);
             if (Math.abs(bx) > 1) continue;
@@ -297,7 +306,7 @@ export default function Watcher({
         }
 
         bucketOf[i] = bucket;
-        sizeOf[i] = s * Math.max(0, edge);
+        sizeOf[i] = s * edge;
       }
     };
 
@@ -308,6 +317,9 @@ export default function Watcher({
       for (let p = pulses.length - 1; p >= 0; p--) {
         if ((now - pulses[p].start) * size * 0.0011 > size * 1.4) pulses.splice(p, 1);
       }
+      // Nothing pushes the dots and they have settled: skip the physics.
+      if (atRest && !pointerInside && pulses.length === 0) return;
+      let moving = 0;
       for (let i = 0; i < count; i++) {
         let fx = (homeX[i] - posX[i]) * SPRING;
         let fy = (homeY[i] - posY[i]) * SPRING;
@@ -339,6 +351,16 @@ export default function Watcher({
         velY[i] = (velY[i] + fy) * DAMPING;
         posX[i] += velX[i];
         posY[i] += velY[i];
+        moving = Math.max(moving, Math.abs(velX[i]) + Math.abs(velY[i]) + Math.abs(homeX[i] - posX[i]) + Math.abs(homeY[i] - posY[i]));
+      }
+      if (!pointerInside && pulses.length === 0 && moving < 0.03) {
+        posX.set(homeX);
+        posY.set(homeY);
+        velX.fill(0);
+        velY.fill(0);
+        atRest = true;
+      } else {
+        atRest = false;
       }
     };
 

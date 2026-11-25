@@ -75,20 +75,6 @@
   opacity: 0.35;
 }
 
-.node[data-pulse="true"] {
-  animation: arrive 0.7s ease-out;
-}
-
-@keyframes arrive {
-  0% {
-    border-color: #30d158;
-    box-shadow: 0 0 0 0 rgba(48, 209, 88, 0.6);
-  }
-  100% {
-    box-shadow: 0 0 0 12px rgba(48, 209, 88, 0);
-  }
-}
-
 @media (max-width: 600px) {
   .map {
     column-gap: 10px;
