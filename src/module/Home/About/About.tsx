@@ -9,9 +9,9 @@ export default function About() {
       <div className={styles.AboutMe}>
         <h2 id="about-title">About me</h2>
         <p>
-          Full-stack developer with a backend focus. I study Artificial Intelligence at{" "}
-          <TextLink href="https://www.tuke.sk">TUKE</TextLink> in Košice and graduated from{" "}
-          <TextLink href="https://itstep.org">IT-Step Academy</TextLink> in Software Development.
+          Full-stack developer with a backend focus. I&apos;m in my second year of Artificial Intelligence at{" "}
+          <TextLink href="https://www.tuke.sk">TUKE</TextLink> in Košice, and I graduated from{" "}
+          <TextLink href="https://itstep.org">IT-Step Academy</TextLink> in Software Development with honours.
         </p>
         <p>
           I design APIs, data models and services on ASP.NET Core and Node.js, and build the interfaces in React

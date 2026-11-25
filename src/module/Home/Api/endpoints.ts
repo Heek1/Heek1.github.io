@@ -21,8 +21,8 @@ export const ENDPOINTS: Endpoint[] = [
     body: {
       name: "Vlad Yuzevych",
       role: "Full-stack developer, backend focus",
-      studying: "Artificial Intelligence at TUKE, Košice",
-      graduated: "IT-Step Academy, Software Development",
+      studying: "Artificial Intelligence at TUKE, Košice, 2nd year",
+      graduated: "IT-Step Academy, Software Development, with honours",
       focus: "LLMs inside real backend systems",
       rule: "Build exactly what the spec asks for",
     },

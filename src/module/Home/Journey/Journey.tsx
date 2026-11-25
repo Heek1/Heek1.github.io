@@ -10,12 +10,12 @@ interface Milestone {
   href?: string;
 }
 
-// Oldest first. Dates come from certificates and GitHub history.
+// Oldest first. Dates come from certificates, GitHub history and Vlad's own account of his studies.
 const MILESTONES: Milestone[] = [
   {
     date: "June 2024",
-    title: "First commits on GitHub",
-    detail: "Homework from IT-Step Academy, the start of everything below.",
+    title: "Started at IT-Step Academy",
+    detail: "Software Development. The first homework went to GitHub the same month.",
   },
   {
     date: "April 2025",
@@ -26,6 +26,12 @@ const MILESTONES: Milestone[] = [
     date: "May 2025",
     title: "C Essentials 1 and Python Essentials 1",
     detail: "Two more Cisco certificates in one month.",
+  },
+  {
+    date: "September 2025",
+    title: "Started Artificial Intelligence at TUKE",
+    detail: "Technical University of Košice. Now in my second year.",
+    href: "https://www.tuke.sk",
   },
   {
     date: "September 2025",
@@ -42,6 +48,11 @@ const MILESTONES: Milestone[] = [
     title: "Prompt Manager",
     detail: "Started a self-hosted tool for versioning and testing AI prompts.",
     href: "https://github.com/Heek1/AI-Prompt-Management-System",
+  },
+  {
+    date: "September 2026",
+    title: "Graduated from IT-Step Academy with honours",
+    detail: "Two years and three months of Software Development, finished with top marks.",
   },
   {
     date: "November 2026",
