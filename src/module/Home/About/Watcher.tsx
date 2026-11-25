@@ -33,6 +33,7 @@ const SPRING = 0.07;
 const DAMPING = 0.8;
 const BLINK_MS = 240;
 const WAKE_MS = 900;
+const MIN_VISIBLE = 0.2;
 
 type Pulse = { x: number; y: number; start: number };
 
@@ -102,6 +103,7 @@ export default function Watcher({
     const pulses: Pulse[] = [];
     let rafId: number | null = null;
     let visible = false;
+    let started = false;
 
     const build = () => {
       size = stage.clientWidth || 1;
@@ -398,7 +400,7 @@ export default function Watcher({
     };
 
     const requestFrame = () => {
-      if (rafId === null && visible) rafId = requestAnimationFrame(frame);
+      if (rafId === null && visible && started) rafId = requestAnimationFrame(frame);
     };
 
     const stop = () => {
@@ -438,9 +440,10 @@ export default function Watcher({
       requestFrame();
     };
 
+    // Animate only while a fair part of the eyes is on screen; a sliver at the edge stays still.
     const intersection = new IntersectionObserver(([entry]) => {
       const wasVisible = visible;
-      visible = entry.isIntersecting && !document.hidden;
+      visible = entry.intersectionRatio >= MIN_VISIBLE && !document.hidden;
       if (visible && !wasVisible && wakeStart < 0 && !reducedMotion.matches) {
         // First time on screen: the eyes open.
         wakeStart = performance.now();
@@ -448,7 +451,7 @@ export default function Watcher({
       }
       if (visible) requestFrame();
       else stop();
-    });
+    }, { threshold: [0, MIN_VISIBLE, 1] });
 
     const onVisibility = () => {
       if (document.hidden) {
@@ -456,7 +459,7 @@ export default function Watcher({
         stop();
       } else {
         const rect = canvas.getBoundingClientRect();
-        visible = rect.bottom > 0 && rect.top < window.innerHeight;
+        visible = rect.bottom > rect.height * MIN_VISIBLE && rect.top < window.innerHeight - rect.height * MIN_VISIBLE;
         requestFrame();
       }
     };
@@ -469,6 +472,18 @@ export default function Watcher({
     build();
     resize.observe(stage);
     intersection.observe(canvas);
+
+    // Don't compete with the page load: start drawing once the browser is idle.
+    const begin = () => {
+      started = true;
+      requestFrame();
+    };
+    const whenIdle = () => {
+      if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(begin, { timeout: 1500 });
+      else setTimeout(begin, 300);
+    };
+    if (document.readyState === "complete") whenIdle();
+    else window.addEventListener("load", whenIdle, { once: true });
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.addEventListener("pointerover", onPointerOver, { passive: true });
     document.documentElement.addEventListener("pointerleave", onPointerLeaveWindow);
