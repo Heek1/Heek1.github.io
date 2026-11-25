@@ -1,0 +1,134 @@
+.page {
+  width: min(1180px, calc(100% - 48px));
+  margin: clamp(96px, 16vh, 180px) auto 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(32px, 6vw, 96px);
+}
+
+.heading {
+  margin: 0;
+  color: white;
+  font-size: clamp(2.6rem, 6.2vw, 5.2rem);
+  line-height: 1;
+}
+
+.lead {
+  margin-top: 20px;
+  color: #a1a1a6;
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+}
+
+.emailRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 36px;
+}
+
+.copy {
+  min-width: 140px;
+  padding: 15px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--green);
+  color: #04200d;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.copy:hover {
+  background: #4be06f;
+}
+
+.copy:active {
+  transform: scale(0.97);
+}
+
+.email {
+  color: #e5e5ea;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  border-bottom: 1px solid rgba(48, 209, 88, 0.5);
+  word-break: break-all;
+}
+
+.email:hover {
+  color: #b9f2c4;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 0;
+  list-style: none;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  color: #e5e5ea;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.links a:hover {
+  border-color: rgba(48, 209, 88, 0.6);
+  color: #b9f2c4;
+}
+
+.eyes {
+  width: min(100%, 440px);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.footer {
+  width: min(1180px, calc(100% - 48px));
+  margin: clamp(80px, 14vh, 140px) auto 0;
+  padding: 28px 0 36px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: #8e8e93;
+  font-size: 0.9rem;
+}
+
+.footer a {
+  color: #c7c7cc;
+  border-bottom: 1px solid rgba(48, 209, 88, 0.45);
+}
+
+.footer a:hover {
+  color: #b9f2c4;
+}
+
+@media (max-width: 820px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .eyes {
+    order: -1;
+    width: min(100%, 320px);
+  }
+}

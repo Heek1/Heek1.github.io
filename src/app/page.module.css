@@ -2,7 +2,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-bottom: 80px;
 }
 
 .section {
@@ -18,31 +17,70 @@
   gap: clamp(24px, 4vw, 64px);
   padding: 92px 32px 0;
   display: flex;
+}
 
-  .title {
-    flex: 0 1 380px;
-    position: relative;
-    z-index: 1;
+.title {
+  flex: 0 1 540px;
+  position: relative;
+  z-index: 1;
+}
 
-    h1 {
-      font-size: clamp(2.3rem, 4vw, 4rem);
-      color: white;
-      margin: 0;
-    }
-  }
+.title h1 {
+  margin: 10px 0 0;
+  color: white;
+  font-size: clamp(2.5rem, 4.8vw, 4.6rem);
+  font-weight: 700;
+  line-height: 1.02;
+}
+
+.hello {
+  color: var(--green);
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  font-weight: 600;
 }
 
 .subtitle {
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.6;
+  max-width: 34em;
+  margin-top: 22px;
   color: #a1a1a6;
-  margin-top: 12px;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.7;
 }
 
-.accent {
-  color: var(--green);
-  text-shadow: 0 0 28px rgba(48, 209, 88, .22);
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  padding: 13px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.primary {
+  background: var(--green);
+  color: #04200d;
+}
+
+.primary:hover {
+  background: #4be06f;
+}
+
+.secondary {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #e5e5ea;
+}
+
+.secondary:hover {
+  border-color: rgba(48, 209, 88, 0.6);
+  color: #b9f2c4;
 }
 
 .scene {
@@ -50,24 +88,31 @@
   min-width: 0;
 }
 
-@media (max-width: 750px) {
+.orbitHint {
+  margin-top: -8px;
+  text-align: center;
+  color: #8e8e93;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 900px) {
   .hero {
     flex-direction: column;
     min-height: auto;
     gap: 0;
-    padding: 104px 18px 0;
+    padding: 112px 20px 0;
+  }
 
-    .title {
-      flex: none;
-      width: 100%;
-      text-align: center;
-    }
+  .title {
+    flex: none;
+    width: 100%;
   }
 
   .scene {
     width: min(100%, 560px);
     flex: none;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
   }
 }

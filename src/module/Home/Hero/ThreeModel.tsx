@@ -43,6 +43,9 @@ export default function ThreeModel({ className }: Props) {
     renderer.setClearColor(0x000000, 0);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
+    // Fade the canvas in once the model is ready, so the placeholder glow hands over smoothly.
+    renderer.domElement.style.opacity = "0";
+    renderer.domElement.style.transition = "opacity 0.8s ease";
     mount.appendChild(renderer.domElement);
 
     const resize = () => {
@@ -147,6 +150,8 @@ export default function ThreeModel({ className }: Props) {
         scene.add(loaded);
         model = loaded;
         start();
+        renderer.domElement.style.opacity = "1";
+        mount.dataset.loaded = "true";
       },
       undefined,
       (error) => console.error("Failed to load 3D model", error)

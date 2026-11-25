@@ -36,7 +36,7 @@
   gap: clamp(32px, 5vw, 72px);
 }
 
-.row:nth-child(even) .shot {
+.row:nth-child(even) .media {
   order: 2;
 }
 
@@ -262,7 +262,7 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .row:nth-child(even) .shot {
+  .row:nth-child(even) .media {
     order: 0;
   }
 }
@@ -279,5 +279,241 @@
   .dots i {
     width: 9px;
     height: 9px;
+  }
+}
+
+/* Filter from the hero orbit */
+
+.filterBar {
+  position: sticky;
+  top: calc(var(--header-offset) + 8px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: -24px 0 48px;
+  padding: 12px 14px 12px 18px;
+  border: 1px solid rgba(48, 209, 88, 0.45);
+  border-radius: 12px;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #e5e5ea;
+}
+
+.filterBar button {
+  flex: none;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: transparent;
+  color: #e5e5ea;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.filterBar button:hover {
+  border-color: rgba(48, 209, 88, 0.6);
+}
+
+.row {
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.row[data-dimmed="true"] {
+  opacity: 0.28;
+  filter: grayscale(0.8);
+}
+
+.stack li[data-active="true"] {
+  border-color: var(--green);
+  background: rgba(48, 209, 88, 0.12);
+  color: #d8fbe2;
+}
+
+/* Screenshot that flips over to show how the project works */
+
+.media {
+  min-width: 0;
+  perspective: 1800px;
+}
+
+.flipper {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.3, 0.7, 0.2, 1);
+}
+
+.flipper[data-flipped="true"] {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  grid-area: 1 / 1;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  min-width: 0;
+}
+
+.front {
+  align-self: center;
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.flipButton {
+  padding: 11px 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.28);
+  border-radius: 10px;
+  background: transparent;
+  color: #e5e5ea;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.flipButton:hover,
+.flipButton[aria-pressed="true"] {
+  border-color: rgba(48, 209, 88, 0.7);
+  color: #b9f2c4;
+}
+
+.pipeline {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at 80% 0%, var(--glow), transparent 55%),
+    #161618;
+  box-shadow: 0 40px 80px -32px rgba(0, 0, 0, 0.8);
+}
+
+.steps {
+  --cycle: 6s;
+  --rail-inset: clamp(22px, 3vw, 32px);
+  position: relative;
+  padding: clamp(16px, 2.4vw, 26px) clamp(18px, 2.6vw, 30px) clamp(16px, 2.4vw, 26px) clamp(44px, 4.4vw, 56px);
+}
+
+.steps ol {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.3vw, 14px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The rail and the signal travelling down it. */
+.steps::before {
+  content: "";
+  position: absolute;
+  top: var(--rail-inset);
+  bottom: var(--rail-inset);
+  left: clamp(22px, 2.2vw, 28px);
+  width: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.signal {
+  position: absolute;
+  top: var(--rail-inset);
+  left: clamp(22px, 2.2vw, 28px);
+  width: 10px;
+  height: 10px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 14px 3px rgba(48, 209, 88, 0.7);
+  opacity: 0;
+}
+
+.pipeline[data-active="true"] .signal {
+  animation: travel var(--cycle) linear infinite;
+}
+
+@keyframes travel {
+  0% {
+    opacity: 0;
+    top: var(--rail-inset);
+  }
+  5% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: calc(100% - var(--rail-inset));
+  }
+}
+
+.steps li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.steps li::before {
+  content: "";
+  position: absolute;
+  top: 0.45em;
+  left: calc(-1 * clamp(44px, 4.4vw, 56px) + clamp(22px, 2.2vw, 28px) - 5px);
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: #161618;
+  box-sizing: border-box;
+}
+
+.pipeline[data-active="true"] .steps li::before {
+  animation: lit var(--cycle) ease-out infinite;
+  animation-delay: calc(var(--cycle) * 0.9 * var(--i) / var(--steps));
+}
+
+@keyframes lit {
+  0%,
+  100% {
+    border-color: rgba(255, 255, 255, 0.35);
+    background: #161618;
+  }
+  4% {
+    border-color: var(--green);
+    background: var(--green);
+    box-shadow: 0 0 12px rgba(48, 209, 88, 0.8);
+  }
+  30% {
+    border-color: rgba(48, 209, 88, 0.6);
+    background: #161618;
+    box-shadow: none;
+  }
+}
+
+.steps strong {
+  color: white;
+  font-size: clamp(0.92rem, 1.2vw, 1.02rem);
+}
+
+.steps span {
+  color: #a1a1a6;
+  font-size: clamp(0.8rem, 1vw, 0.88rem);
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .row:nth-child(even) .media {
+    order: 0;
   }
 }

@@ -36,7 +36,21 @@ const WAKE_MS = 900;
 
 type Pulse = { x: number; y: number; start: number };
 
-export default function Watcher() {
+type Props = {
+  /** CSS selector of an element the eyes glance at when nobody moves the mouse. */
+  idleTarget?: string;
+  /** Look around faster, as if lost. */
+  restless?: boolean;
+  hint?: string | null;
+  className?: string;
+};
+
+export default function Watcher({
+  idleTarget,
+  restless = false,
+  hint = "It follows your cursor. Click to poke it.",
+  className,
+}: Props) {
   const stageRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -151,10 +165,19 @@ export default function Watcher() {
         targetX = pointerX;
         targetY = pointerY;
       } else if (!reducedMotion.matches && now >= nextWander) {
-        // Nobody is moving the mouse: look around on its own.
-        targetX = center + random(-0.9, 0.9) * size;
-        targetY = center + random(-0.6, 0.6) * size;
-        nextWander = now + random(900, 2400);
+        // Nobody is moving the mouse: look around on its own, or at the element it was told to watch.
+        const watched = idleTarget ? document.querySelector(idleTarget) : null;
+        if (watched && Math.random() < 0.65) {
+          const own = canvas.getBoundingClientRect();
+          const box = watched.getBoundingClientRect();
+          const scale = size / (own.width || 1);
+          targetX = (box.left + box.width / 2 - own.left) * scale;
+          targetY = (box.top + box.height / 2 - own.top) * scale;
+        } else {
+          targetX = center + random(-0.9, 0.9) * size;
+          targetY = center + random(-0.6, 0.6) * size;
+        }
+        nextWander = now + (restless ? random(350, 900) : random(900, 2400));
       }
       const dx = targetX - center;
       const dy = targetY - center;
@@ -443,10 +466,10 @@ export default function Watcher() {
       document.removeEventListener("visibilitychange", onVisibility);
       reducedMotion.removeEventListener("change", onMotionChange);
     };
-  }, []);
+  }, [idleTarget, restless]);
 
   return (
-    <figure className={styles.wrap}>
+    <figure className={`${styles.wrap} ${className ?? ""}`}>
       <div className={styles.stage} ref={stageRef}>
         <canvas
           ref={canvasRef}
@@ -455,7 +478,7 @@ export default function Watcher() {
           aria-label="A pair of eyes made of dots that follows your cursor"
         />
       </div>
-      <figcaption className={styles.hint}>It follows your cursor. Click to poke it.</figcaption>
+      {hint && <figcaption className={styles.hint}>{hint}</figcaption>}
     </figure>
   );
 }

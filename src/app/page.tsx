@@ -1,6 +1,10 @@
 import TechOrbit from "@/module/Home/Hero/TechOrbit";
 import About from "@/module/Home/About/About";
 import Projects from "@/module/Home/Projects/Projects";
+import Journey from "@/module/Home/Journey/Journey";
+import ApiSection from "@/module/Home/Api/ApiSection";
+import Contact from "@/module/Home/Contact/Contact";
+import Footer from "@/module/Home/Contact/Footer";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -8,11 +12,24 @@ export default function Home() {
     <main className={styles.page}>
       <section id="home" className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.title}>
-          <h1 id="hero-title">Hi there, I&apos;m <span className={styles.accent}>Vlad.</span></h1>
-          <p className={styles.subtitle}>Here&apos;s a bit about me and my work.</p>
+          <p className={styles.hello}>Hi, I&apos;m Vlad.</p>
+          <h1 id="hero-title">I build backends that put AI to work.</h1>
+          <p className={styles.subtitle}>
+            Full-stack developer studying AI at TUKE in Košice. ASP.NET Core and Node.js on the server, React and
+            Angular on the screen.
+          </p>
+          <div className={styles.heroActions}>
+            <a className={styles.primary} href="#projects">
+              See my projects
+            </a>
+            <a className={styles.secondary} href="#contact">
+              Get in touch
+            </a>
+          </div>
         </div>
         <div className={styles.scene}>
           <TechOrbit />
+          <p className={styles.orbitHint}>Click a technology to see where I used it.</p>
         </div>
       </section>
 
@@ -23,6 +40,20 @@ export default function Home() {
       <section id="projects" className={styles.section} aria-labelledby="projects-title">
         <Projects />
       </section>
+
+      <section id="journey" className={styles.section} aria-labelledby="journey-title">
+        <Journey />
+      </section>
+
+      <section id="api" className={styles.section} aria-labelledby="api-title">
+        <ApiSection />
+      </section>
+
+      <section id="contact" className={styles.section} aria-labelledby="contact-title">
+        <Contact />
+      </section>
+
+      <Footer />
     </main>
   );
 }

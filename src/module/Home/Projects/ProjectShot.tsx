@@ -10,10 +10,11 @@ type Props = {
   address: string;
   width: number;
   height: number;
+  tabIndex?: number;
 };
 
 // Screenshot in a browser frame that leans towards the cursor.
-export default function ProjectShot({ href, src, alt, address, width, height }: Props) {
+export default function ProjectShot({ href, src, alt, address, width, height, tabIndex }: Props) {
   const frameRef = useRef<HTMLDivElement>(null);
 
   const onPointerMove = (event: React.PointerEvent<HTMLAnchorElement>) => {
@@ -44,6 +45,7 @@ export default function ProjectShot({ href, src, alt, address, width, height }: 
       rel="noopener noreferrer"
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
+      tabIndex={tabIndex}
       aria-label={`Open the live demo: ${address}`}
     >
       <div className={styles.frame} ref={frameRef}>

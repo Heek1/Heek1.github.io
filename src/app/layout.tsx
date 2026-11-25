@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
+import { Bricolage_Grotesque, Figtree, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/navigation/SiteHeader";
 
+const display = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-display", display: "swap" });
+const text = Figtree({ subsets: ["latin"], variable: "--font-text", display: "swap" });
+const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
+
 const title = "Vladyslav Yuzevych | Full-stack Developer";
-const description = "Portfolio of Vladyslav Yuzevych, a full-stack developer focused on backend systems.";
+const description =
+  "Full-stack developer with a backend focus: ASP.NET Core, Node.js, React and Angular, with AI built into real backend systems.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://heek1.github.io"),
@@ -30,7 +36,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${display.variable} ${text.variable} ${mono.variable}`}>
+      <head>
+        {/* Start downloading the hero model right away instead of after the scripts run. */}
+        <link rel="preload" href="/3d/abstract_figure_twist.glb" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body>
         <SiteHeader />
         {children}

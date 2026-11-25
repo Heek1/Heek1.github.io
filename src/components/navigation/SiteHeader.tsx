@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import styles from "./SiteHeader.module.css";
 import ContactPopup from "../contact/ContactPopup";
+import MiniEyes from "./MiniEyes";
+import Link from "next/link";
 
 const NAV_ITEMS = [
   { label: "Home", id: "home" },
   { label: "About me", id: "about" },
   { label: "Projects", id: "projects" },
+  { label: "Journey", id: "journey" },
+  { label: "API", id: "api" },
 ];
 
 export default function SiteHeader() {
@@ -63,7 +67,7 @@ export default function SiteHeader() {
       return (
         <li key={item.id} className={`${styles.navItem} ${active ? styles.active : ""}`}>
           <a
-            href={`#${item.id}`}
+            href={`/#${item.id}`}
             className={styles.navLink}
             aria-current={active ? "true" : undefined}
             onClick={onClick}
@@ -79,10 +83,11 @@ export default function SiteHeader() {
       className={`${styles.header} ${scrolled || menuOpen ? styles.scrolled : ""} ${menuOpen ? styles.menuOpen : ""}`}
     >
       <div className={styles.inner}>
-        <a href="#home" className={styles.brand} aria-label="Vladyslav Yuzevych, back to top">
+        <Link href="/#home" className={styles.brand} aria-label="Vladyslav Yuzevych, back to top">
+          <MiniEyes />
           <span className={styles.brandFull}>Vladyslav Yuzevych</span>
           <span className={styles.brandShort} aria-hidden="true">Vlad Y.</span>
-        </a>
+        </Link>
 
         <nav className={`${styles.centerNav} ${scrolled ? styles.scrolled : ""}`} aria-label="Primary">
           <ul className={styles.navList}>{links()}</ul>
