@@ -1,4 +1,4 @@
-import TechOrbit from "@/module/Home/Hero/TechOrbit";
+import StackMap from "@/module/Home/Hero/StackMap";
 import About from "@/module/Home/About/About";
 import Projects from "@/module/Home/Projects/Projects";
 import Journey from "@/module/Home/Journey/Journey";
@@ -28,7 +28,7 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.scene}>
-          <TechOrbit />
+          <StackMap />
           <p className={styles.orbitHint}>Click a technology to see where I used it.</p>
         </div>
       </section>

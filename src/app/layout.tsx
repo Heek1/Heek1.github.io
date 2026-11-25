@@ -37,10 +37,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${display.variable} ${text.variable} ${mono.variable}`}>
-      <head>
-        {/* Start downloading the hero model right away instead of after the scripts run. */}
-        <link rel="preload" href="/3d/abstract_figure_twist.glb" as="fetch" crossOrigin="anonymous" />
-      </head>
       <body>
         <SiteHeader />
         {children}

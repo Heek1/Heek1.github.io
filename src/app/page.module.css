@@ -95,7 +95,7 @@
   font-size: 0.9rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1180px) {
   .hero {
     flex-direction: column;
     min-height: auto;
@@ -109,7 +109,8 @@
   }
 
   .scene {
-    width: min(100%, 560px);
+    width: min(100%, 860px);
+    margin-top: 24px;
     flex: none;
     display: flex;
     flex-direction: column;
